@@ -22,13 +22,14 @@ var regcss = /<link.*?>/gmi;
 // Character used to create key for the `sections` object. This should probably be done more elegantly.
 var sectionsJoinChar = '\ue000';
 
+var options;
 
-module.exports = function (content) {
-  var blocks = getBlocks(content);
-
+module.exports = function (content, opts) {
+  var blocks, replaced;
+  options = opts;
+  blocks = getBlocks(content);
   content = updateReferences(blocks, content);
-
-  var replaced = compactContent(blocks);
+  replaced = compactContent(blocks);
 
   return [ content, replaced ];
 };
@@ -143,7 +144,9 @@ var helpers = {
     if (ccmatches) {
       ref = indent + ccmatches[1] + linefeed + ref + linefeed + indent + ccmatches[2];
     }
-
+    if( options.preserveBlockComments ){
+      ref = lines[0] + linefeed + ref + linefeed + lines[lines.length - 1];
+    }
     return content.replace(block, ref);
   }
 };
