@@ -26,7 +26,7 @@ var options;
 
 module.exports = function (content, opts) {
   var blocks, replaced;
-  options = opts;
+  options = opts || {};
   blocks = getBlocks(content);
   content = updateReferences(blocks, content);
   replaced = compactContent(blocks);
